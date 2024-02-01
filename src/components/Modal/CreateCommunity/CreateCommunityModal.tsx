@@ -17,17 +17,12 @@ import {
   Flex,
   Icon,
 } from "@chakra-ui/react";
-import {
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { BiMovie, BiTv } from "react-icons/bi";
-import { PiTelevision } from "react-icons/pi";
+import { MdPublic } from "react-icons/md";
+
+import { RiChatPrivateFill } from "react-icons/ri";
 
 type CreateCommunityModalProps = {
   open: boolean;
@@ -155,34 +150,38 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                 <Text fontWeight={600} fontSize={15}>
                   Community Type
                 </Text>
-                <Stack spacing={2}>
+                <Stack spacing={2} mt={4}>
                   <Checkbox
-                    name="movie"
-                    isChecked={communityType === "movie"}
+                    name="public"
+                    isChecked={communityType === "public"}
                     onChange={onCommunityTypeChange}
                   >
                     <Flex align="center">
-                      <Icon as={BiMovie} color="gray.500" mr={2}></Icon>
+                      <Icon as={MdPublic} color="gray.500" mr={2}></Icon>
                       <Text fontSize="10pt" mr={1}>
-                        Movie
+                        Public
                       </Text>
                       <Text fontSize="8pt" color="gray.500" pt={1}>
-                        Create a community for your favourite Movie!
+                        Create a community for the global Gravity users!
                       </Text>
                     </Flex>
                   </Checkbox>
                   <Checkbox
-                    name="tvshow"
-                    isChecked={communityType === "tvshow"}
+                    name="private"
+                    isChecked={communityType === "private"}
                     onChange={onCommunityTypeChange}
                   >
                     <Flex align="center">
-                      <Icon as={PiTelevision} color="gray.500" mr={2}></Icon>
+                      <Icon
+                        as={RiChatPrivateFill}
+                        color="gray.500"
+                        mr={2}
+                      ></Icon>
                       <Text fontSize="10pt" mr={1}>
-                        TV Show
+                        Private
                       </Text>
                       <Text fontSize="8pt" color="gray.500" pt={1}>
-                        Create a community for your favourite TV Show!
+                        Create a community for your personalized members!
                       </Text>
                     </Flex>
                   </Checkbox>
