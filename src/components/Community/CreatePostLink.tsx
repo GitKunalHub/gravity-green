@@ -1,3 +1,4 @@
+import useDirectory from "@/hooks/useDirectory";
 import { Flex, Icon, Image, Input } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,12 +10,14 @@ type CreatePostProps = {};
 
 const CreatePostLink: React.FC<CreatePostProps> = () => {
   const router = useRouter();
+  const { toggleMenuOpen } = useDirectory();
   const onClick = () => {
     const { communityID } = router.query;
     if (communityID) {
       router.push(`/g/${router.query.communityID}/submit`);
       return;
     }
+    toggleMenuOpen();
   };
   return (
     <Flex

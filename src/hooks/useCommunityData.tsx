@@ -7,14 +7,17 @@ import { auth, firestore } from "@/firebase/clientApp";
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   increment,
   writeBatch,
 } from "firebase/firestore";
 import { AuthModalState } from "@/atoms/authModalAtom";
+import { useRouter } from "next/router";
 
 const useCommunityData = () => {
   const [user] = useAuthState(auth);
+  const router = useRouter();
   const [communityStateValue, setCommunityStateValue] =
     useRecoilState(communityState);
   const setAuthModalState = useSetRecoilState(AuthModalState);
@@ -61,6 +64,7 @@ const useCommunityData = () => {
       const newSnippet: CommunitySnippet = {
         communityID: communityData.id,
         imageURL: communityData.imageURL || "",
+        isModerator: user?.uid === communityData.creatorID,
       };
 
       batch.set(
@@ -112,6 +116,24 @@ const useCommunityData = () => {
     }
     setLoading(false);
   };
+
+  const getCommunityData = async (communityId: string) => {
+    try {
+      const communityDocRef = doc(firestore, "communities", communityId);
+      const communityDoc = await getDoc(communityDocRef);
+
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: {
+          id: communityDoc.id,
+          ...communityDoc.data,
+        } as Community,
+      }));
+    } catch (error) {
+      console.log("getCommunityData", error);
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       setCommunityStateValue((prev) => ({
@@ -122,6 +144,14 @@ const useCommunityData = () => {
     }
     getMySnippet();
   }, [user]);
+
+  useEffect(() => {
+    const { communityId } = router.query;
+
+    if (communityId && !communityStateValue.currentCommunity) {
+      getCommunityData(communityId as string);
+    }
+  }, [router.query, communityStateValue.currentCommunity]);
   return {
     communityStateValue,
     onJoinOrLeaveCommunity,
