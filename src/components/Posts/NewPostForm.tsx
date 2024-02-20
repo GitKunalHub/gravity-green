@@ -87,11 +87,12 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         });
       } else {
         const query = async (data: any) => {
+          const HUGGING_FACE_TOKEN = process.env.HUGGING_FACE_TOKEN;
           const response = await fetch(
             "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
             {
               headers: {
-                Authorization: "Bearer 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",
+                Authorization: `Bearer ${HUGGING_FACE_TOKEN}`,
               },
               method: "POST",
               body: JSON.stringify(data),
@@ -107,10 +108,7 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         const dataUrl = `data:image/jpeg;base64,${Buffer.from(
           imageData
         ).toString("base64")}`;
-        const generatedImageRef = ref(
-          storage,
-          `posts/${postDocRef.id}/generated-image.jpg`
-        );
+        const generatedImageRef = ref(storage, `posts/${postDocRef.id}/image`);
         await uploadString(generatedImageRef, dataUrl, "data_url");
         const generatedDownloadURL = await getDownloadURL(generatedImageRef);
 
