@@ -85,6 +85,38 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         await updateDoc(postDocRef, {
           imageURL: downloadURL,
         });
+      } else {
+        const query = async (data: any) => {
+          const response = await fetch(
+            "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+            {
+              headers: {
+                Authorization: "Bearer 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",
+              },
+              method: "POST",
+              body: JSON.stringify(data),
+            }
+          );
+          const result = await response.arrayBuffer();
+          return Buffer.from(result);
+        };
+
+        const imageData = await query({
+          inputs: newPost.title,
+        });
+        const dataUrl = `data:image/jpeg;base64,${Buffer.from(
+          imageData
+        ).toString("base64")}`;
+        const generatedImageRef = ref(
+          storage,
+          `posts/${postDocRef.id}/generated-image.jpg`
+        );
+        await uploadString(generatedImageRef, dataUrl, "data_url");
+        const generatedDownloadURL = await getDownloadURL(generatedImageRef);
+
+        await updateDoc(postDocRef, {
+          imageURL: generatedDownloadURL,
+        });
       }
 
       router.back();
