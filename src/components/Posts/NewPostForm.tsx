@@ -87,12 +87,11 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         });
       } else {
         const query = async (data: any) => {
-          const HUGGING_FACE_TOKEN = process.env.HUGGING_FACE_TOKEN;
           const response = await fetch(
             "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
             {
               headers: {
-                Authorization: `Bearer ${HUGGING_FACE_TOKEN}`,
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_HUGGING_FACE_TOKEN}`,
               },
               method: "POST",
               body: JSON.stringify(data),
