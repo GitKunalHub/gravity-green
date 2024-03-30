@@ -50,7 +50,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const communityDocRef = doc(
       firestore,
       "communities",
-      context.query.communityID as string
+      (context.query.communityID as string).toLowerCase()
     );
 
     const communityDoc = await getDoc(communityDocRef);
