@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Stack, Textarea } from "@chakra-ui/react";
+import { Button, Flex, Input, Stack, Switch, Textarea } from "@chakra-ui/react";
 import React from "react";
 
 type TextInputsProps = {
@@ -11,6 +11,8 @@ type TextInputsProps = {
   ) => void;
   handleCreatePost: () => void;
   loading: boolean;
+  // useHuggingFaceModel: boolean;
+  // setUseHuggingFaceModel: (value: boolean) => void;
 };
 
 const TextInputs: React.FC<TextInputsProps> = ({
@@ -18,6 +20,8 @@ const TextInputs: React.FC<TextInputsProps> = ({
   onChange,
   handleCreatePost,
   loading,
+  // useHuggingFaceModel,
+  // setUseHuggingFaceModel,
 }) => {
   return (
     <Stack spacing={3} width="100%">

@@ -13,6 +13,7 @@ export type Post = {
   imageURL?: string;
   communityImageURL?: string;
   createdAt: Timestamp;
+  aiGenerated?: boolean;
 };
 
 export type PostVote = {

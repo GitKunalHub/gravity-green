@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Flex, Icon, Text } from "@chakra-ui/react";
+import { Alert, AlertIcon, Flex, Icon, Switch, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import TabItem from "./TabItem";
 import TextInputs from "./PostForm/TextInputs";
@@ -49,10 +49,25 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
     title: "",
     body: "",
   });
+  const [savedAIGeneratedImageURL, setSavedAIGeneratedImageURL] =
+    useState<string>("");
+  const [aiGeneratedReady, setAiGeneratedReady] = useState(false);
+
+  const handleAiGenerated = (generated: boolean) => {
+    setAiGeneratedReady(generated);
+  };
+
+  const [useHuggingFaceModel, setUseHuggingFaceModel] = useState(false);
 
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const [aiGeneratedImageURL, setAiGeneratedImageURL] = useState<string>("");
+  const [aiGenerated, setAiGenerated] = useState(false);
+  const handleAiGeneratedImageURL = (url: string) => {
+    setAiGeneratedImageURL(url);
+  };
 
   const handleCreatePost = async () => {
     const { communityID } = router.query;
@@ -71,6 +86,7 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
       numberOfComments: 0,
       voteStatus: 0,
       createdAt: serverTimestamp() as Timestamp,
+      aiGenerated: useHuggingFaceModel,
     };
 
     setLoading(true);
@@ -85,7 +101,8 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         await updateDoc(postDocRef, {
           imageURL: downloadURL,
         });
-      } else {
+      } else if (aiGenerated) {
+        // I want to check if the image is executed on the handleGenerateAI function on ImageUpload component and want to move ahead if the handleGenerateAI returns true.
         const query = async (data: any) => {
           const response = await fetch(
             "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
@@ -164,6 +181,9 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
             setSelectedTab={setSelectedTab}
+            title={textInputs.title}
+            onAiGeneratedImageURL={setSavedAIGeneratedImageURL}
+            onAiGenerated={(generated) => setAiGenerated(generated)} // Callback function
           />
         )}
       </Flex>
