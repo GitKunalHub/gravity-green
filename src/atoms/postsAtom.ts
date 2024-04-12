@@ -7,6 +7,7 @@ export type Post = {
   creatorId: string;
   creatorDisplayName: string;
   title: string;
+  aititle: string;
   body: string;
   numberOfComments: number;
   voteStatus: number;

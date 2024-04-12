@@ -1,8 +1,9 @@
 import { Button, Flex, Input, Stack, Switch, Textarea } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 type TextInputsProps = {
   textInputs: {
+    aititle: string;
     title: string;
     body: string;
   };
@@ -23,6 +24,7 @@ const TextInputs: React.FC<TextInputsProps> = ({
   // useHuggingFaceModel,
   // setUseHuggingFaceModel,
 }) => {
+  const [isAiGenerated, setIsAiGenerated] = useState(false);
   return (
     <Stack spacing={3} width="100%">
       <Input
@@ -40,6 +42,24 @@ const TextInputs: React.FC<TextInputsProps> = ({
           borderColor: "black",
         }}
       />
+      {isAiGenerated && (
+        <Input
+          name="aititle"
+          value={textInputs.aititle}
+          onChange={onChange}
+          fontSize="10pt"
+          borderRadius={4}
+          placeholder="AI-Title"
+          _placeholder={{ color: "gray.500" }}
+          _focus={{
+            outline: "none",
+            bg: "white",
+            border: "1px solid",
+            borderColor: "black",
+          }}
+        />
+      )}
+
       <Textarea
         name="body"
         value={textInputs.body}
@@ -57,6 +77,14 @@ const TextInputs: React.FC<TextInputsProps> = ({
         }}
       />
       <Flex justify="flex-end">
+        <Switch
+          isChecked={isAiGenerated}
+          onChange={() => setIsAiGenerated(!isAiGenerated)}
+          colorScheme="teal"
+          size="lg"
+        >
+          AI-Generated
+        </Switch>
         <Button
           height="34px"
           padding="0px 30px"

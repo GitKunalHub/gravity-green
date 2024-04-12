@@ -48,6 +48,7 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
   const [textInputs, setTextInputs] = useState({
     title: "",
     body: "",
+    aititle: "",
   });
   const [savedAIGeneratedImageURL, setSavedAIGeneratedImageURL] =
     useState<string>("");
@@ -81,8 +82,9 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
       communityImageURL: communityImageURL || "",
       creatorId: user.uid,
       creatorDisplayName: user.email!.split("@")[0],
+      aititle: textInputs.aititle,
       title: textInputs.title,
-      body: textInputs.body,
+      body: textInputs.body.replace(/\n/g, "<NEWLINE>"),
       numberOfComments: 0,
       voteStatus: 0,
       createdAt: serverTimestamp() as Timestamp,
@@ -119,7 +121,7 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
         };
 
         const imageData = await query({
-          inputs: newPost.title,
+          inputs: newPost.aititle,
         });
         const dataUrl = `data:image/jpeg;base64,${Buffer.from(
           imageData
@@ -181,7 +183,7 @@ export const NewPostForm: React.FC<NewPostFormProps> = ({
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
             setSelectedTab={setSelectedTab}
-            title={textInputs.title}
+            aititle={textInputs.aititle}
             onAiGeneratedImageURL={setSavedAIGeneratedImageURL}
             onAiGenerated={(generated) => setAiGenerated(generated)} // Callback function
           />

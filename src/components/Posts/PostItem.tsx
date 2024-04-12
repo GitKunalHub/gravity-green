@@ -162,7 +162,9 @@ const PostItem: React.FC<PostItemProps> = ({
           <Text fontSize="12pt" fontWeight={600}>
             {post.title}
           </Text>
-          <Text fontSize="10pt">{post.body}</Text>
+          <Text fontSize="10pt" whiteSpace="pre-wrap">
+            {post.body.replace(/<NEWLINE>/g, "\n")}
+          </Text>
           {post.imageURL && (
             <Flex justify="center" align="center" p={2}>
               {loadingImage && (

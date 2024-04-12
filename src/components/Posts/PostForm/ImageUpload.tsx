@@ -9,7 +9,7 @@ type ImageUploadProps = {
   onSelectImage: (event: React.ChangeEvent<HTMLInputElement>) => void;
   setSelectedTab: (value: string) => void;
   setSelectedFile: (value: string) => void;
-  title: string;
+  aititle: string;
   onAiGeneratedImageURL: React.Dispatch<React.SetStateAction<string>>;
   onAiGenerated: (generated: boolean) => void; // Callback function
 };
@@ -19,7 +19,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   onSelectImage,
   setSelectedFile,
   setSelectedTab,
-  title,
+  aititle,
   onAiGeneratedImageURL,
   onAiGenerated,
 }) => {
@@ -59,7 +59,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     };
 
     const imageData = await query({
-      inputs: title,
+      inputs: aititle,
     });
     const dataUrl = `data:image/jpeg;base64,${Buffer.from(imageData).toString(
       "base64"
